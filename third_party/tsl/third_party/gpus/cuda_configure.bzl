@@ -33,14 +33,15 @@ NB: DEPRECATED! Use `hermetic/cuda_configure` rule instead.
 load(
     "@bazel_tools//tools/cpp:lib_cc_configure.bzl",
     "escape_string",
-    "get_env_var",
 )
 load(
     "@bazel_tools//tools/cpp:windows_cc_configure.bzl",
-    "find_msvc_tool",
     "find_vc_path",
     "setup_vc_env_vars",
 )
+
+load("@rules_cc//cc/private/toolchain:windows_cc_configure.bzl", "find_msvc_tool")
+load("@rules_cc//cc/private/toolchain:lib_cc_configure.bzl", "get_env_var")
 load("//third_party/clang_toolchain:download_clang.bzl", "download_clang")
 load(
     "//third_party/remote_config:common.bzl",
