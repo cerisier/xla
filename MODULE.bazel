@@ -29,6 +29,16 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "snappy", version = "1.2.1")
 bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
 
+bazel_dep(name = "toolchains_llvm_bootstrapped", version = "0.3.1")
+local_path_override(
+    module_name = "toolchains_llvm_bootstrapped",
+    path = "../../cerisier/toolchains_llvm_bootstrapped",
+)
+
+register_toolchains(
+    "@toolchains_llvm_bootstrapped//toolchain:all",
+)
+
 # Only for compatibility, not directly used, change repo_name to None after upgrading Bazel to latest 7.x
 bazel_dep(name = "eigen", version = "4.0.0-20241125.bcr.3", repo_name = "DO_NOT_USE_eigen")
 bazel_dep(name = "grpc-java", version = "1.75.0", repo_name = "DO_NOT_USE_grpc_java")

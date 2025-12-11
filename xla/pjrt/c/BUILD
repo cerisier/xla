@@ -386,7 +386,7 @@ cc_library(
 
 # PJRT CPU plugin.
 xla_cc_binary(
-    name = "pjrt_c_api_cpu_plugin.so",
+    name = "pjrt_c_api_cpu_plugin",
     additional_linker_inputs = [
         ":pjrt_c_api_cpu_version_script.lds",
     ],
@@ -488,7 +488,7 @@ cc_library(
 
 # PJRT GPU plugin. Can be configured to be built for CUDA or ROCM.
 xla_cc_binary(
-    name = "pjrt_c_api_gpu_plugin.so",
+    name = "pjrt_c_api_gpu_plugin",
     additional_linker_inputs = [
         ":pjrt_c_api_gpu_version_script.lds",
     ],
