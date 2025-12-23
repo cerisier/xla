@@ -469,10 +469,10 @@ common:cpu_cross --define=with_cross_compiler_support=true
 # WARNING: THESE OPTIONS WONT WORK IF YOU DO NOT HAVE PROPER AUTHENTICATION AND PERMISSIONS
 
 # Allow creation of resultstore URLs for any bazel invocation
-common:resultstore --google_default_credentials
-common:resultstore --bes_backend=buildeventservice.googleapis.com
-common:resultstore --bes_instance_name="tensorflow-testing"
-common:resultstore --bes_results_url="https://source.cloud.google.com/results/invocations"
+# common:resultstore --google_default_credentials
+# common:resultstore --bes_backend=buildeventservice.googleapis.com
+# common:resultstore --bes_instance_name="tensorflow-testing"
+# common:resultstore --bes_results_url="https://source.cloud.google.com/results/invocations"
 common:resultstore --bes_timeout=600s
 
 # Flag to enable remote config
@@ -487,7 +487,7 @@ common:use_tar_archive_files --repo_env=USE_MIRRORED_TAR_ARCHIVE_FILES=1
 common:rbe_base --config=resultstore
 common:rbe_base --define=EXECUTOR=remote
 common:rbe_base --jobs=800
-common:rbe_base --remote_executor=grpcs://remotebuildexecution.googleapis.com
+# common:rbe_base --remote_executor=grpcs://remotebuildexecution.googleapis.com
 common:rbe_base --remote_timeout=3600
 common:rbe_base --spawn_strategy=remote,worker,standalone,local
 # Attempt to minimize the amount of data transfer between bazel and the remote
@@ -695,10 +695,10 @@ common:cross_compile_macos_x86 --platform_mappings=tools/toolchains/cross_compil
 
 # RBE cross-compile configs for Darwin x86
 common:rbe_cross_compile_macos_x86 --config=cross_compile_macos_x86 --remote_download_minimal
-common:rbe_cross_compile_macos_x86 --bes_backend="" --bes_results_url="" --bes_timeout="0s"
+# common:rbe_cross_compile_macos_x86 --bes_backend="" --bes_results_url="" --bes_timeout="0s"
 common:rbe_cross_compile_macos_x86 --experimental_remote_build_event_upload="minimal"
 common:rbe_cross_compile_macos_x86 --config=rbe_cross_compile_base
-common:rbe_cross_compile_macos_x86 --bes_upload_mode=nowait_for_upload_complete
+# common:rbe_cross_compile_macos_x86 --bes_upload_mode=nowait_for_upload_complete
 test:rbe_cross_compile_macos_x86 --config=rbe_cross_compile_base
 # Increase the test timeout as tests often take longer on mac.
 test:rbe_cross_compile_macos_x86 --test_timeout=300,450,1200,3600
@@ -742,3 +742,16 @@ build:pjrt_aarch64_cuda12_nightly --config=pjrt_aarch64_nightly --config=pjrt_cu
 build:pjrt_x86_cuda13_nightly --config=pjrt_x86_nightly --config=pjrt_cuda13
 build:pjrt_aarch64_cuda13_nightly --config=pjrt_aarch64_nightly --config=pjrt_cuda13
 # END PJRT RELEASE CONFIGS
+
+
+common:remote --bes_results_url=https://app.buildbuddy.io/invocation/
+common:remote --bes_backend=grpcs://remote.buildbuddy.io
+common:remote --remote_cache=grpcs://remote.buildbuddy.io
+common:remote --remote_download_toplevel
+# common:remote --nobuild_runfile_links
+common:remote --remote_timeout=3600
+common:remote --remote_executor=grpcs://remote.buildbuddy.io
+common:remote --noexperimental_throttle_remote_action_building
+common:remote --experimental_remote_execution_keepalive
+common:remote --grpc_keepalive_time=30s
+common:remote --jobs=800
