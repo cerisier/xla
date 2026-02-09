@@ -59,7 +59,7 @@ common --define tsl_protobuf_header_only=true
 
 common --define=allow_oversize_protos=true
 
-common --spawn_strategy=standalone
+# common --spawn_strategy=standalone
 common -c opt
 
 common --repo_env=USE_PYWRAP_RULES=True
@@ -146,9 +146,9 @@ common:macos --apple_platform_type=macos
 
 # Use cc toolchains from apple_support for Apple builds.
 # https://github.com/bazelbuild/apple_support/tree/master?tab=readme-ov-file#bazel-6-setup
-common:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
-common:macos --crosstool_top=@local_config_apple_cc//:toolchain
-common:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
+# common:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
+# common:macos --crosstool_top=@local_config_apple_cc//:toolchain
+# common:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
 
 # gRPC on MacOS requires this #define
 common:macos --copt=-DGRPC_BAZEL_BUILD
@@ -462,7 +462,7 @@ common:xla_windows_x86_cpu_2022 --platforms="//tools/toolchains/win2022:windows_
 common:v2 --define=tf_api_version=2 --action_env=TF2_BEHAVIOR=1
 
 # Enable all targets in XLA
-common:cpu_cross --define=with_cross_compiler_support=true
+common:cpu_cross --define=with_cross_compiler_support2=true
 
 # BEGIN TF REMOTE BUILD EXECUTION OPTIONS
 # Options when using remote execution
@@ -607,7 +607,7 @@ common:release_macos_base --define=no_nccl_support=true --output_filter=^$
 
 # Ensure release_base is set on mac
 common:release_macos_base --config=cpu_cross
-common:release_macos_base --config=clang_local
+# common:release_macos_base --config=clang_local
 
 # Build configs for macOS x86
 common:release_macos_x86 --config=release_macos_base

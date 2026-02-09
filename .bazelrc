@@ -5,13 +5,30 @@ common:bzlmod --enable_bzlmod --noenable_workspace
 common --incompatible_enable_cc_toolchain_resolution
 common --repo_env USE_HERMETIC_CC_TOOLCHAIN=1
 
+common --repo_env=BAZEL_DO_NOT_DETECT_CPP_TOOLCHAIN=1
+common --repo_env=BAZEL_NO_APPLE_CPP_TOOLCHAIN=1
+common --repo_env=BAZEL_DO_NOT_DETECT_SWIFT_TOOLCHAIN=1
 # TODO: Migrate for https://github.com/bazelbuild/bazel/issues/7260
-common:clang_local --noincompatible_enable_cc_toolchain_resolution
+common:clang_local --incompatible_enable_cc_toolchain_resolution
 common:clang_local --@rules_ml_toolchain//common:enable_hermetic_cc=False
-common:clang_local --repo_env USE_HERMETIC_CC_TOOLCHAIN=0
+common:clang_local --repo_env USE_HERMETIC_CC_TOOLCHAIN=1
 
 # Load the TensorFlow bazelrc
 import %workspace%/tensorflow.bazelrc
 import %workspace%/warnings.bazelrc
 
 try-import %workspace%/xla_configure.bazelrc
+
+common:remote_default --bes_results_url=https://app.buildbuddy.io/invocation/
+common:remote_default --bes_backend=grpcs://remote.buildbuddy.io
+common:remote_default --remote_cache=grpcs://remote.buildbuddy.io
+common:remote_default --remote_cache_compression
+common:remote_default --remote_download_toplevel
+common:remote_default --nobuild_runfile_links
+common:remote_default --remote_timeout=3600
+common:remote_default --noexperimental_throttle_remote_action_building
+common:remote_default --experimental_remote_execution_keepalive
+common:remote_default --grpc_keepalive_time=30s
+common:remote_default --remote_executor=grpcs://remote.buildbuddy.io
+common:remote_default --jobs=800
+common:remote_default --extra_execution_platforms=@toolchains_llvm_bootstrapped//:rbe_platform
