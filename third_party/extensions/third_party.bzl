@@ -26,6 +26,8 @@ load("//third_party/nanobind:workspace.bzl", nanobind = "repo")
 load("//third_party/nasm:workspace.bzl", nasm = "repo")
 load("//third_party/net_zstd:workspace.bzl", net_zstd = "repo")
 load("//third_party/nvshmem:workspace.bzl", nvshmem = "repo")
+load("//third_party/nvtx:workspace.bzl", nvtx = "repo")
+load("//third_party/nccl:workspace.bzl", nccl = "repo")
 load("//third_party/pthreadpool:workspace.bzl", pthreadpool = "repo")
 load("//third_party/py/ml_dtypes:workspace.bzl", ml_dtypes = "repo")
 load("//third_party/raft:workspace.bzl", raft = "xla_repo")
@@ -48,6 +50,7 @@ def _third_party_ext_impl(mctx):  # @unused
     benchmark()
     brotli()  # Needed for Riegeli
     cpuinfo()
+    cutlass()
     cudnn_frontend()
     dlpack()
     ducc()
@@ -69,6 +72,8 @@ def _third_party_ext_impl(mctx):  # @unused
     nanobind()
     nasm()
     nvshmem()
+    nvtx()
+    nccl()
     onednn()
     pthreadpool()
     raft()
@@ -87,7 +92,6 @@ def _third_party_ext_impl(mctx):  # @unused
     uv()
     xnnpack()
     xxd()
-    cutlass()
 
 third_party_ext = module_extension(
     implementation = _third_party_ext_impl,
