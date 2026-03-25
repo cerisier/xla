@@ -1,4 +1,5 @@
 load("@rules_license//rules:license.bzl", "license")
+load("@bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
 
 package(
     default_applicable_licenses = [":license"],
@@ -11,4 +12,15 @@ license(
     name = "license",
     package_name = "xla",
     license_kinds = ["@rules_license//licenses/spdx:Apache-2.0"],
+)
+
+copy_to_directory(
+    name = "cuda_path",
+    srcs = [
+        "@cuda_cudart//:include/cuda.h",
+        "@cuda_nvcc//:nvvm",
+        "@cuda_nvcc//:fatbinary",
+        "@cuda_nvcc//:ptxas",
+    ],
+    include_external_repositories = ["**"],
 )
