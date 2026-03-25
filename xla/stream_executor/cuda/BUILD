@@ -1,5 +1,5 @@
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_library")
+load("@@//:cuda.bzl", "cuda_library")
 load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 load(
     "//xla:xla.default.bzl",

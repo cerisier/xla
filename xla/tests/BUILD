@@ -2,7 +2,7 @@
 #   Base testing infrastructure for XLA.
 
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_library")
+load("@@//:cuda.bzl", "cuda_library")
 load(
     "@local_config_rocm//rocm:build_defs.bzl",
     "if_rocm_is_configured",

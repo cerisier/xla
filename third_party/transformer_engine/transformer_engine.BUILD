@@ -1,5 +1,5 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_library")
+load("@@//:cuda.bzl", "cuda_library")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_python//python:py_binary.bzl", "py_binary")
 load("@xla//third_party/py/rules_pywrap:pywrap.impl.bzl", "python_extension", "pywrap_library")

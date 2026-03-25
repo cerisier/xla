@@ -1,7 +1,8 @@
 # NVIDIA TensorRT Open Source Plugins
 # This package contains build targets for select TensorRT plugins included in the
 # TensorRT open source repository.
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_default_copts", "cuda_library")
+load("@local_config_cuda//cuda:build_defs.bzl", "cuda_default_copts")
+load("@@//:cuda.bzl", "cuda_library")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
 exports_files(["LICENSE"])

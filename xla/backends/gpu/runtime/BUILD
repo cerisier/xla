@@ -1,4 +1,4 @@
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_library")
+load("@@//:cuda.bzl", "cuda_library")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//xla:xla.default.bzl", "xla_cc_test", "xla_internal", "xla_py_proto_library")
 load("//xla/tests:build_defs.bzl", "xla_test")

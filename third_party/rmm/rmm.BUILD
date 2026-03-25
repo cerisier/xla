@@ -1,4 +1,4 @@
-load("@local_config_cuda//cuda:build_defs.bzl", "cuda_library")
+load("@@//:cuda.bzl", "cuda_library")
 
 licenses(["notice"])  # Apache 2.0
 

@@ -30,6 +30,41 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "snappy", version = "1.2.1")
 bazel_dep(name = "xxd", version = "9.1.0917")
 bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
+bazel_dep(name = "llvm", version = "0.6.8")
+local_path_override(
+    module_name = "llvm",
+    path = "../toolchains_llvm_bootstrapped",
+)
+
+register_toolchains("@llvm//toolchain:all")
+
+bazel_dep(name = "cuda_toolkit", version = "0.0.2")
+git_override(
+    module_name = "cuda_toolkit",
+    commit = "0c9592678f74c7c435dd2ec56d7c02ec199a63e0",
+    remote = "https://github.com/hermeticbuild/cuda-toolkit.git",
+)
+# local_path_override(
+#     module_name = "cuda_toolkit",
+#     path = "../../hermeticbuild/cuda-toolkit",
+# )
+cuda_toolkit = use_extension("@cuda_toolkit//extensions:cuda.bzl", "cuda")
+
+cuda_toolkit.redist(
+    name = "cuda_13_0_0",
+    version = "13.0.0",
+)
+
+use_repo(
+    cuda_toolkit,
+    "cuda",
+    "cuda_13_0_0",
+)
+
+register_toolchains(
+    "@cuda//cuda:all",
+)
+
 # go/keep-sorted end
 
 # Only for compatibility, not directly used, change repo_name to None after upgrading Bazel to latest 7.x
@@ -243,6 +278,7 @@ use_repo(
     "cuda_cusparse",
     "cuda_driver",
     "cuda_nvcc",
+    "cuda_nvvm",
     "cuda_nvjitlink",
     "cuda_nvml",
     "cuda_nvrtc",
@@ -252,15 +288,15 @@ use_repo(
 nvshmem_redist = use_extension("@rules_ml_toolchain//extensions:nvshmem_redist.bzl", "nvshmem_redist_ext")
 use_repo(nvshmem_redist, "nvidia_nvshmem")
 
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
+# register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64")
 
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
+# register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_cuda")
 
-register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_sycl")
+# register_toolchains("@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_sycl")
 
-register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
+# register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64")
 
-register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
+# register_toolchains("@rules_ml_toolchain//cc:linux_aarch64_linux_aarch64_cuda")
 
 ### Other local config repos
 rocm_configure = use_extension("//third_party/extensions:rocm_configure.bzl", "rocm_configure_ext")
