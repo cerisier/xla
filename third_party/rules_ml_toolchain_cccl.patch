@@ -1,0 +1,66 @@
+diff --git a/gpu/cuda/cuda_json_init_repository.bzl b/gpu/cuda/cuda_json_init_repository.bzl
+index b66ddfc..6b29f32 100644
+--- a/gpu/cuda/cuda_json_init_repository.bzl
++++ b/gpu/cuda/cuda_json_init_repository.bzl
+@@ -20,6 +20,7 @@ load(
+ )
+ load(
+     "//gpu/cuda:cuda_redist_versions.bzl",
++    "CCCL_3_2_0_DIST_DICT",
+     "CUDA_REDIST_JSON_DICT",
+     "CUDNN_REDIST_JSON_DICT",
+     "MIRRORED_TARS_CUDA_REDIST_JSON_DICT",
+@@ -43,7 +44,11 @@ load(
+     _cuda_umd_redistributions = "CUDA_UMD_REDISTRIBUTIONS",
+ )
+ 
+-_cuda_redistributions_updated = dict(_cuda_redistributions, nvidia_driver = _cuda_umd_redistributions.get("nvidia_driver", {}))
++_cuda_redistributions_updated = dict(
++    _cuda_redistributions,
++    cuda_cccl = """ + repr(CCCL_3_2_0_DIST_DICT["cuda_cccl"]) + """,
++    nvidia_driver = _cuda_umd_redistributions.get("nvidia_driver", {}),
++)
+ 
+ CUDA_REDISTRIBUTIONS = _cuda_redistributions_updated
+ 
+diff --git a/gpu/cuda/cuda_redist_versions.bzl b/gpu/cuda/cuda_redist_versions.bzl
+index 9a4ed10..a9ac8b6 100644
+--- a/gpu/cuda/cuda_redist_versions.bzl
++++ b/gpu/cuda/cuda_redist_versions.bzl
+@@ -21,6 +21,19 @@ MIRRORED_TAR_CUDA_REDIST_PATH_PREFIX = "https://storage.googleapis.com/mirror.te
+ MIRRORED_TAR_CUDNN_REDIST_PATH_PREFIX = "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/"
+ MIRRORED_TAR_NVSHMEM_REDIST_PATH_PREFIX = "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/nvshmem/redist/"
+ 
++_CCCL_3_2_0_GITHUB_ARCHIVE = {
++    "full_path": "https://github.com/NVIDIA/cccl/archive/b1951b22423d35b6fd4578e4df8ca8647fe3a465.tar.gz",
++    "sha256": "ebb1a52353262630918065e73e1a3e11f08fe31b990c293b491dfc9cb92b07a8",
++    "strip_prefix": "cccl-b1951b22423d35b6fd4578e4df8ca8647fe3a465",
++}
++
++CCCL_3_2_0_DIST_DICT = {
++    "cuda_cccl": {
++        "linux-x86_64": _CCCL_3_2_0_GITHUB_ARCHIVE,
++        "linux-sbsa": _CCCL_3_2_0_GITHUB_ARCHIVE,
++    },
++}
++
+ CUDA_REDIST_JSON_DICT = {
+     "11.8": [
+         "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_11.8.0.json",
+@@ -692,10 +705,14 @@ REDIST_VERSIONS_TO_BUILD_TEMPLATES = {
+     "cuda_cccl": {
+         "repo_name": "cuda_cccl",
+         "version_to_template": {
+-            "any": "//gpu/cuda/build_templates:cuda_cccl.BUILD.tpl",
++            "any": "//gpu/cuda/build_templates:cuda_cccl_github.BUILD.tpl",
+         },
+         "local": {
+-            "source_dirs": ["include", "lib"],
++            "local_path_env_var": "LOCAL_CCCL_PATH",
++            "source_dirs": ["thrust", "libcudacxx", "cub"],
++            "version_to_template": {
++                "any": "//gpu/cuda/build_templates:cuda_cccl_github.BUILD.tpl",
++            },
+         },
+     },
+     "cuda_crt": {

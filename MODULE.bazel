@@ -82,6 +82,11 @@ bazel_dep(name = "rules_ml_toolchain")
 archive_override(
     module_name = "rules_ml_toolchain",
     integrity = "sha256-+08asgV1bUG9UZvMeT7ucW1edNj1NzCZvX57t0BvWx8=",
+    patch_strip = 1,
+    patches = [
+        "//third_party:rules_ml_toolchain_cccl.patch",
+        "//third_party:rules_ml_toolchain_cuda_library.patch",
+    ],
     strip_prefix = "rules_ml_toolchain-6d19ed7e900ccf6fae6301a09c9139299ea41ef4",
     urls = ["https://github.com/meteorcloudy/rules_ml_toolchain/archive/6d19ed7e900ccf6fae6301a09c9139299ea41ef4.tar.gz"],
 )

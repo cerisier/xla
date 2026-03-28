@@ -1,0 +1,68 @@
+diff --git a/gpu/cuda/build_defs.bzl.tpl b/gpu/cuda/build_defs.bzl.tpl
+index 09c3c59..89f89da 100644
+--- a/gpu/cuda/build_defs.bzl.tpl
++++ b/gpu/cuda/build_defs.bzl.tpl
+@@ -178,7 +178,7 @@ def cuda_header_library(
+         **kwargs
+     )
+ 
+-def cuda_library(copts = [], tags = [], deps = [], implementation_deps = [], **kwargs):
++def cuda_library(copts = [], defines = [], tags = [], deps = [], implementation_deps = [], **kwargs):
+     """Wrapper over cc_library which adds default CUDA options."""
+     native.cc_library(
+         copts = cuda_default_copts() + copts,
+@@ -186,10 +186,11 @@ def cuda_library(copts = [], tags = [], deps = [], implementation_deps = [], **k
+         deps = deps + if_cuda_is_configured([
+             "@local_config_cuda//cuda:implicit_cuda_headers_dependency",
+         ]),
+-        implementation_deps = implementation_deps + if_cuda_hermetic_clang([
+-            "%{hermetic_wrappers_headers}",
+-        ]),
+-        defines = [
++        implementation_deps = implementation_deps,
++#        implementation_deps = implementation_deps + if_cuda_hermetic_clang([
++#            "%{hermetic_wrappers_headers}",
++#        ]),
++        defines = defines + [
+             "CLANG_CUDA=1",
+         ],
+         **kwargs
+diff --git a/gpu/cuda/cuda_configure.bzl b/gpu/cuda/cuda_configure.bzl
+index 2f59afc..3b18939 100644
+--- a/gpu/cuda/cuda_configure.bzl
++++ b/gpu/cuda/cuda_configure.bzl
+@@ -317,6 +317,8 @@ def _create_cuda_ptx_copts_list(repository_ctx, cuda_version):
+         else:
+             print("This OS or architecture isn't supported by Hermetic C++.")
+ 
++    clang_major_version = "22"
++
+     if not clang_major_version:
+         cc = _find_cc(repository_ctx)
+         if _is_clang(cc):
+diff --git a/gpu/cuda/cuda_redist_versions.bzl b/gpu/cuda/cuda_redist_versions.bzl
+index 9a4ed10..6732595 100644
+--- a/gpu/cuda/cuda_redist_versions.bzl
++++ b/gpu/cuda/cuda_redist_versions.bzl
+@@ -537,6 +537,7 @@ PTX_VERSION_DICT = {
+         "19": "8.5",
+         "20": "8.7",
+         "21": "8.8",
++        "22": "9.0",
+     },
+     # To find, look at https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#release-notes
+     "cuda": {
+diff --git a/gpu/nccl/cuda_nccl.BUILD.tpl b/gpu/nccl/cuda_nccl.BUILD.tpl
+index 47a0c77..07d78a1 100644
+--- a/gpu/nccl/cuda_nccl.BUILD.tpl
++++ b/gpu/nccl/cuda_nccl.BUILD.tpl
+@@ -26,7 +26,8 @@ cc_library(
+ filegroup(
+     name = "header_list",
+     %{comment}srcs = glob([
+-        %{comment}"include/nccl*.h",
++        %{comment}"include/**/*.h",
++        %{comment}"include/**/*.cuh",
+     %{comment}]),
+ )
+ 
