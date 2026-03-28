@@ -2887,6 +2887,9 @@ cuda_library(
 
 cuda_library(
     name = "multi_gpu_barrier_kernel_cuda",
+    copts = [
+        "-fgnu-keywords",
+    ],
     srcs = [
         "multi_gpu_barrier_kernel_cuda.cu.cc",
         "//xla/stream_executor/gpu:multi_gpu_barrier_kernel.cu.h",
