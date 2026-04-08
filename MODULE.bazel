@@ -31,40 +31,14 @@ bazel_dep(name = "rules_shell", version = "0.6.1")
 bazel_dep(name = "snappy", version = "1.2.1")
 bazel_dep(name = "xxd", version = "9.1.0917")
 bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
-bazel_dep(name = "llvm", version = "0.6.8")
-local_path_override(
+bazel_dep(name = "llvm", version = "0.7.0")
+git_override(
     module_name = "llvm",
-    path = "../toolchains_llvm_bootstrapped",
+    commit = "7fb2937efdd2599451e16c098fad323f4003e521",
+    remote = "git@github.com:hermeticbuild/hermetic-llvm.git",
 )
 
 register_toolchains("@llvm//toolchain:all")
-
-bazel_dep(name = "cuda_toolkit", version = "0.0.2")
-git_override(
-    module_name = "cuda_toolkit",
-    commit = "0c9592678f74c7c435dd2ec56d7c02ec199a63e0",
-    remote = "https://github.com/hermeticbuild/cuda-toolkit.git",
-)
-# local_path_override(
-#     module_name = "cuda_toolkit",
-#     path = "../../hermeticbuild/cuda-toolkit",
-# )
-cuda_toolkit = use_extension("@cuda_toolkit//extensions:cuda.bzl", "cuda")
-
-cuda_toolkit.redist(
-    name = "cuda_13_0_0",
-    version = "13.0.0",
-)
-
-use_repo(
-    cuda_toolkit,
-    "cuda",
-    "cuda_13_0_0",
-)
-
-register_toolchains(
-    "@cuda//cuda:all",
-)
 
 # go/keep-sorted end
 
