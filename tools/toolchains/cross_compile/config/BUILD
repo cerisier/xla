@@ -31,6 +31,34 @@ platform(
 )
 
 toolchain(
+    name = "linux-x86-cross-compile-cc-toolchain",
+    exec_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    toolchain = "//tools/toolchains/cross_compile/cc:linux_x86_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+toolchain(
+    name = "linux-aarch64-cross-compile-cc-toolchain",
+    exec_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+    ],
+    toolchain = "//tools/toolchains/cross_compile/cc:linux_aarch64_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+toolchain(
     name = "macos-x86-cross-compile-cc-toolchain",
     exec_compatible_with = [
         "@platforms//os:linux",
